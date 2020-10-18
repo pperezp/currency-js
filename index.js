@@ -2,6 +2,7 @@ const HOURS_FOR_NEXT_CALL = 24;
 
 const COP_KEY = "COP";
 const CLP_KEY = "CLP";
+const BASE_CURRECY_KEY = CLP_KEY;
 const CLP_CONVERSION_RATES_KEY = "clpConversionRates";
 const LAST_READ_KEY = "lastRead";
 
@@ -89,6 +90,25 @@ function loadCurrency(baseCurrency, conversionRatesKey){
         });
 }
 
+function transform(pesos, fromCurrency, toCurrency){
+    let baseCurrencyPesos = toBaseCurrencyPesos(pesos, fromCurrency);
+    let toCurrencyPesos = transformBaseCurrencyTo(toCurrency, baseCurrencyPesos);
+
+    return toCurrencyPesos;
+}
+
+function transformBaseCurrencyTo(currency, pesos){
+    let conversionRate = getConversionRate(CLP_CONVERSION_RATES_KEY, currency);
+
+    return conversionRate * pesos;
+}
+
+function toBaseCurrencyPesos(pesos, currency){
+    let conversionRate = getConversionRate(CLP_CONVERSION_RATES_KEY, currency);
+
+    return pesos / conversionRate;
+}
+
 function getConversionRate(conversionRatesKey, currency){
     var conversionRates = JSON.parse(localStorage.getItem(conversionRatesKey));
 
@@ -100,14 +120,3 @@ function getConversionRate(conversionRatesKey, currency){
     }
 }
 
-function transformClpTo(currency, pesos){
-    let conversionRate = getConversionRate(CLP_CONVERSION_RATES_KEY, currency);
-
-    return conversionRate * pesos;
-}
-
-function toChileanPesos(pesos, currency){
-    let conversionRate = getConversionRate(CLP_CONVERSION_RATES_KEY, currency);
-
-    return pesos / conversionRate;
-}
