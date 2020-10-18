@@ -12,7 +12,12 @@ const LAST_READ_KEY = "lastRead";
 const API_KEY = "8f00c0bf6abb8a108bb4e0a8";
 const API_URL = "https://v6.exchangerate-api.com/v6/" + API_KEY +"/latest/";
 
-let currencies;
+let currenciesArray;
+let switchButton;
+let inputCurrencyTag;
+let outputCurrencyTag; 
+let fromCurrencyTag;
+let toCurrencyTag;
 
 document.addEventListener("DOMContentLoaded", function() {
     init();
@@ -36,6 +41,41 @@ function init(){
         showInfo();
         loadArrayCurrencies();
     }
+
+    initView();
+    initEvents();
+}
+
+function initEvents(){
+    switchButton.addEventListener("click", function(){
+        let aux = fromCurrencyTag.value;
+        let fromValue = toCurrencyTag.value;
+        let toValue = aux;
+    
+        document.querySelector("#from").value = fromValue;
+        document.querySelector("#to").value = toValue;
+
+        loadOutputCurrency();
+    });
+
+    inputCurrencyTag.addEventListener("keyup", function(){
+        loadOutputCurrency();
+    });
+}
+
+function initView(){
+    switchButton = document.querySelector("#switchButton");
+    outputCurrencyTag = document.querySelector("#output");
+    inputCurrencyTag = document.querySelector("#pesos");
+    fromCurrencyTag = document.querySelector("#from");
+    toCurrencyTag = document.querySelector("#to");
+
+    loadOutputCurrency();
+}
+
+function loadOutputCurrency(){
+    let outputValue = transform(inputCurrencyTag.value, fromCurrencyTag.value, toCurrencyTag.value);
+    outputCurrencyTag.value = outputValue;
 }
 
 function getLastReadDate(){
@@ -98,11 +138,11 @@ function loadCurrency(baseCurrency, conversionRatesKey){
 }
 
 function loadArrayCurrencies(){
-    currencies = new Array();
+    currenciesArray = new Array();
     var conversionRates = JSON.parse(localStorage.getItem(BASE_CONVERSION_RATES_KEY));
 
     for(let conversionRate in conversionRates){
-        currencies.push(conversionRate);
+        currenciesArray.push(conversionRate);
     }
 }
 
