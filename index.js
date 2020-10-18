@@ -1,8 +1,8 @@
 const HOURS_FOR_NEXT_CALL = 24;
 
 const COP_KEY = "COP";
-
 const CLP_KEY = "CLP";
+
 const BASE_CURRECY_KEY = CLP_KEY;
 const CLP_CONVERSION_RATES_KEY = "clpConversionRates";
 const BASE_CONVERSION_RATES_KEY = CLP_CONVERSION_RATES_KEY;
@@ -150,7 +150,7 @@ function transform(pesos, fromCurrency, toCurrency){
     let baseCurrencyPesos = toBaseCurrencyPesos(pesos, fromCurrency);
     let toCurrencyPesos = transformBaseCurrencyTo(toCurrency, baseCurrencyPesos);
 
-    return toCurrencyPesos;
+    return new Intl.NumberFormat('es-CL', { style: 'currency', currency: toCurrency }).format(toCurrencyPesos);
 }
 
 function transformBaseCurrencyTo(currency, pesos){

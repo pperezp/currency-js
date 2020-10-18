@@ -4,13 +4,23 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Currency</title>
+        <link type="text/css" rel="stylesheet" href="index.css"/>
     </head>
     <body>
-        <input id="pesos" value="1" type="number" min="1"/>
-        <input id="from" value="CLP" disabled/>
-        <input id="switchButton" type="button" value="to"/>
-        <input id="to" value="COP" disabled/>
-        <input id="output" value="0" disabled/>
+        <h1>Currency</h1>
+        <div id="transformDiv">
+            <input id="from" value="CLP" class="currency" disabled/>
+            <input id="switchButton" type="button" value="to"/>
+            <input id="to" value="USD" class="currency" disabled/>
+        </div>
+        
+        <div>
+            <input id="pesos" value="1" type="number" min="1" class="price"/>
+        </div>
+
+        <div>
+            <input id="output" value="0" class="price" disabled/>
+        </div>
 
         <script src="index.js"></script>
     </body>

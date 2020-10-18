@@ -1,0 +1,16 @@
+body{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.currency{
+    width: 50px;
+    text-align: center;
+}
+
+#transformDiv{
+    padding-bottom: 10px;
+}
+
+.flag{
+    width: 35px;
+}
