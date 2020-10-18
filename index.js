@@ -88,3 +88,14 @@ function loadCurrency(baseCurrency, conversionRatesKey){
             showInfo();
         });
 }
+
+function getConversionRate(conversionRatesKey, currency){
+    var conversionRates = JSON.parse(localStorage.getItem(conversionRatesKey));
+
+    for(let conversionRate in conversionRates){
+        if(conversionRate == currency){
+            console.log(conversionRate + " - " + conversionRates[conversionRate]); 
+            return conversionRates[conversionRate];
+        }
+    }
+}
