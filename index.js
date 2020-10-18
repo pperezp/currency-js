@@ -1,14 +1,18 @@
 const HOURS_FOR_NEXT_CALL = 24;
 
 const COP_KEY = "COP";
+
 const CLP_KEY = "CLP";
 const BASE_CURRECY_KEY = CLP_KEY;
 const CLP_CONVERSION_RATES_KEY = "clpConversionRates";
+const BASE_CONVERSION_RATES_KEY = CLP_CONVERSION_RATES_KEY;
+
 const LAST_READ_KEY = "lastRead";
 
 const API_KEY = "8f00c0bf6abb8a108bb4e0a8";
 const API_URL = "https://v6.exchangerate-api.com/v6/" + API_KEY +"/latest/";
 
+let currencies;
 
 document.addEventListener("DOMContentLoaded", function() {
     init();
@@ -30,6 +34,7 @@ function init(){
 
     if(displayInfo){
         showInfo();
+        loadArrayCurrencies();
     }
 }
 
@@ -48,7 +53,7 @@ function existLastRead(lastReadDate){
 }
 
 function loadCurrencies(){
-    loadCurrency(CLP_KEY, CLP_CONVERSION_RATES_KEY);
+    loadCurrency(BASE_CURRECY_KEY, BASE_CONVERSION_RATES_KEY);
 }
 
 function havePassedTimeInHours(hours, lastReadDate){
@@ -70,7 +75,7 @@ function showInfo(){
 
     console.log("Diff in hours  : " + diffHrs);
     console.log("lastRead       : " + lastReadDate);
-    console.log("CLP            : " + localStorage.getItem(CLP_CONVERSION_RATES_KEY));
+    console.log("CLP            : " + localStorage.getItem(BASE_CONVERSION_RATES_KEY));
 }
 
 function loadCurrency(baseCurrency, conversionRatesKey){
@@ -86,8 +91,19 @@ function loadCurrency(baseCurrency, conversionRatesKey){
             console.info("set NEW last read value...");
             localStorage.setItem(LAST_READ_KEY, new Date());
 
+            loadArrayCurrencies();
+
             showInfo();
         });
+}
+
+function loadArrayCurrencies(){
+    currencies = new Array();
+    var conversionRates = JSON.parse(localStorage.getItem(BASE_CONVERSION_RATES_KEY));
+
+    for(let conversionRate in conversionRates){
+        currencies.push(conversionRate);
+    }
 }
 
 function transform(pesos, fromCurrency, toCurrency){
