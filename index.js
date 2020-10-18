@@ -1,6 +1,13 @@
 const HOURS_FOR_NEXT_CALL = 24;
+
 const COP_KEY = "COP";
+const CLP_KEY = "CLP";
+const CLP_CONVERSION_RATES_KEY = "clpConversionRates";
 const LAST_READ_KEY = "lastRead";
+
+const API_KEY = "8f00c0bf6abb8a108bb4e0a8";
+const API_URL = "https://v6.exchangerate-api.com/v6/" + API_KEY +"/latest/";
+
 
 document.addEventListener("DOMContentLoaded", function() {
     init();
@@ -12,12 +19,12 @@ function init(){
 
     if(!existLastRead(lastReadDate)){
         displayInfo = false;
-        loadCurrency();
+        loadCurrencies();
     }
 
     if(havePassedTimeInHours(HOURS_FOR_NEXT_CALL, lastReadDate)){
         displayInfo = false;
-        loadCurrency();
+        loadCurrencies();
     }
 
     if(displayInfo){
@@ -39,18 +46,8 @@ function existLastRead(lastReadDate){
     return lastReadDate != null;
 }
 
-function loadCurrency(){
-    fetch('https://v6.exchangerate-api.com/v6/8f00c0bf6abb8a108bb4e0a8/latest/CLP')
-        .then(response => response.json())
-        .then(data => {
-            console.log("set NEW COP value...");
-            localStorage.setItem(COP_KEY, data.conversion_rates.COP)
-
-            console.info("set NEW last read value...");
-            localStorage.setItem(LAST_READ_KEY, new Date());
-
-            showInfo();
-        });
+function loadCurrencies(){
+    loadCurrency(CLP_KEY, CLP_CONVERSION_RATES_KEY);
 }
 
 function havePassedTimeInHours(hours, lastReadDate){
@@ -72,5 +69,22 @@ function showInfo(){
 
     console.log("Diff in hours  : " + diffHrs);
     console.log("lastRead       : " + lastReadDate);
-    console.log("COP            : " + localStorage.getItem(COP_KEY));
+    console.log("CLP            : " + localStorage.getItem(CLP_CONVERSION_RATES_KEY));
+}
+
+function loadCurrency(baseCurrency, conversionRatesKey){
+    fetch(API_URL + baseCurrency)
+        .then(response => response.json())
+        .then(data => {
+
+            let conversionRates = JSON.stringify(data.conversion_rates)
+
+            console.log("set " + conversionRatesKey + " value...");
+            localStorage.setItem(conversionRatesKey, conversionRates);
+
+            console.info("set NEW last read value...");
+            localStorage.setItem(LAST_READ_KEY, new Date());
+
+            showInfo();
+        });
 }
