@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            (function() {
+                let today = new Date();
+                let lastRead = localStorage.getItem("lastRead");
+
+                if(lastRead == null){
+                    loadCurrency();
+                    lastRead = localStorage.getItem("lastRead");
+                }
+
+                lastRead = new Date(lastRead);
+
+                let diffMs = (today - lastRead);
+                let diffHrs = Math.floor((diffMs % 86400000) / 3600000); // hours
+                let diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+                console.log(diffHrs);
+                console.log(diffMins);
+ 
+                if(diffHrs >= 24){
+                    loadCurrency();
+                    lastRead = localStorage.getItem("lastRead");
+                }
+
+                console.log("lastRead = " + lastRead);
+                console.log("COP = " + localStorage.getItem("COP"));
+            })();
+
+            function loadCurrency(){
+                fetch('https://v6.exchangerate-api.com/v6/8f00c0bf6abb8a108bb4e0a8/latest/CLP')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("set NEW COP value...");
+                        localStorage.setItem("COP", data.conversion_rates.COP)
+
+                        console.info("set NEW last read value...");
+                        localStorage.setItem("lastRead", new Date());
+                    });
+            }
+        </script>
+    </body>
+</html>
