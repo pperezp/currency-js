@@ -99,3 +99,15 @@ function getConversionRate(conversionRatesKey, currency){
         }
     }
 }
+
+function transformClpTo(currency, pesos){
+    let conversionRate = getConversionRate(CLP_CONVERSION_RATES_KEY, currency);
+
+    return conversionRate * pesos;
+}
+
+function toChileanPesos(pesos, currency){
+    let conversionRate = getConversionRate(CLP_CONVERSION_RATES_KEY, currency);
+
+    return pesos / conversionRate;
+}
